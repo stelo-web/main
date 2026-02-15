@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>格安・高品質な静的ホームページ制作 | ココナラ実績多数 | 個人事業主・中小企業向け</title>
+    <meta name="description" content="ココナラで高評価。初期費用1,200円〜、維持費0円の静的ホームページ制作サービス。個人事業主様・中小企業様に特化し、SEOに強いコーポレートサイトを格安で構築します。スマホ対応、表示速度高速化もお任せください。">
+    
+    <link rel="preload" href="https://stelo-web.github.io/main/font/Noto_Sans_JP.zip/NotoSansJP-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "格安静的ホームページ制作サービス（ココナラ）",
+      "image": "https://example.com/logo.png",
+      "description": "ココナラで提供するSEOに強い静的HTMLホームページ制作サービス。",
+      "priceRange": "¥1,200〜",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "JP"
+      },
+      "areaServed": "JP",
+      "availableLanguage": "Japanese"
+    }
+    </script>
+
+    <style>
+        /* --- Font Definition --- */
+        /* 注意: 指定されたURLがZIPファイルそのものである場合、ブラウザは解釈できません。
+           以下は「そのURLが.ttfファイルを直接返却する」前提の記述です。
+        */
+        @font-face {
+            font-family: 'Noto Sans JP Custom';
+            src: url('https://stelo-web.github.io/main/font/Noto_Sans_JP.zip/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+            font-weight: 100 900; /* Variable Font対応 */
+            font-display: swap;   /* 読み込み完了まではシステムフォントを表示（FOIT防止） */
+        }
+
+        /* --- Base Variables & Reset --- */
+        :root {
+            --primary-color: #003366;
+            --accent-color: #D4AF37;
+            --text-color: #333333;
+            --bg-light: #f9f9f9;
+            --bg-white: #ffffff;
+            /* 初期はシステムフォント、読み込み後にカスタムフォントへSWAP */
+            --font-main: 'Noto Sans JP Custom', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-color);
+            line-height: 1.8;
+            background-color: var(--bg-white);
+            overflow-x: hidden;
+            /* font-synthesis を無効化し、レンダリング負荷を軽減 */
+            font-synthesis: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* --- Performance Optimization Utility --- */
+        /* content-visibility: auto
+           画面外のレンダリングをスキップし、初期ロード時のメインスレッドの負荷（レイアウト計算）を大幅削減します。
+           これにより「謎の重いタスク」を軽減します。
+        */
+        .render-optimize {
+            content-visibility: auto;
+            contain-intrinsic-size: 1000px; /* 大まかな高さを指定してスクロールバーのガタつき防止 */
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--bg-white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            will-change: transform; /* 合成レイヤーを生成し再描画コスト削減 */
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.2rem; font-weight: 900; color: var(--primary-color); }
+        .header-cta {
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .text-center { text-align: center; }
+        .fw-bold { font-weight: 700; }
+        .mb-20 { margin-bottom: 20px; }
+        .mb-40 { margin-bottom: 40px; }
+
+        /* --- Main Visual (FV) --- */
+        /* LCP要素のため、アニメーションでの不可視化を避け、即座に表示する設計 */
+        .hero {
+            padding-top: 150px; /* ヘッダー分確保 */
+            padding-bottom: 100px;
+            background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
+            color: #fff;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            line-height: 1.4;
+            margin-bottom: 30px;
+            font-weight: 900;
+            /* LCP向上のため、transformアニメーションはJS読み込み後まで待機させない */
+        }
+        .hero-tag {
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        /* --- Common Section Styles --- */
+        section { padding: 80px 0; }
+        .bg-gray { background-color: var(--bg-light); }
+        
+        h2 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        /* --- Layout Grids --- */
+        .problem-list { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .problem-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 30px;
+            width: calc(33.333% - 20px);
+            min-width: 280px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .value-box {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        .value-icon { font-size: 3rem; color: var(--primary-color); margin-right: 20px; flex-shrink: 0; }
+        
+        .seo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .seo-item { border: 1px solid var(--primary-color); padding: 20px; border-radius: 4px; }
+
+        .price-card {
+            background: #fff;
+            border: 2px solid var(--primary-color);
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .price-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: #fff;
+            padding: 5px 20px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .price-main { font-size: 3rem; font-weight: 900; color: var(--primary-color); line-height: 1; }
+        .cta-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .cta-btn:hover { transform: translateY(-2px); }
+
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 20px; }
+        .faq-q { font-weight: bold; color: var(--primary-color); margin-bottom: 10px; display: block; }
+        .faq-q::before { content: "Q. "; }
+        .faq-a::before { content: "A. "; color: var(--accent-color); font-weight: bold; }
+
+        footer { background-color: var(--primary-color); color: #fff; text-align: center; padding: 40px 0; font-size: 0.8rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.5rem; }
+            .problem-item { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-inner">
+            <div class="logo">Web制作のプロ</div>
+            <a href="#cta" class="header-cta">ご相談・お見積り</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container text-center">
+                <span class="hero-tag">ココナラ実績・高評価多数</span>
+                <h1>
+                    初期費用を抑えて信頼を勝ち取る<br>
+                    個人事業主・中小企業のための<br>
+                    <span style="border-bottom: 3px solid var(--accent-color);">静的ホームページ制作</span>
+                </h1>
+                <p style="margin-bottom:40px;">
+                    SEO内部対策済み・スマホ対応・維持費不要。<br>
+                    「格安」でも「高品質」なWebサイトを構築します。
+                </p>
+                <div data-aos="zoom-in" data-aos-delay="600">
+                    <a href="#cta" class="cta-btn">詳しく見る（1,200円〜）</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray render-optimize">
+            <div class="container">
+                <h2 data-aos="fade-up">こんなお悩みありませんか？</h2>
+                <div class="problem-list">
+                    <div class="problem-item" data-aos="fade-up" data-aos-delay="100">
+                        <h3>予算がない</h3>
+                        <p>制作会社の見積もりが30万円以上で、手が出せない。</p>
+                    </div>
+                    <div class="problem-item" data-aos="fade-up" data-aos-delay="200">
+                        <h3>月額費を払いたくない</h3>
+                        <p>更新もしないのに、毎月の保守管理費が無駄に感じる。</p>
+                    </div>
+                    <div class="problem-item" data-aos="fade-up" data-aos-delay="300">
+                        <h3>何から始めれば...</h3>
+                        <p>ドメイン？サーバー？専門用語が多すぎて分からない。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="render-optimize">
+            <div class="container">
+                <h2 data-aos="fade-up">なぜ、安くて高品質なのか？</h2>
+                
+                <div class="value-box" data-aos="fade-right">
+                    <div class="value-icon">⚡️</div>
+                    <div>
+                        <h3>静的HTMLだから「速い」</h3>
+                        <p>WordPressなどのCMSを使用しないため、ページの読み込み速度が圧倒的に高速です。</p>
+                    </div>
+                </div>
+
+                <div class="value-box" data-aos="fade-left">
+                    <div class="value-icon">🛡️</div>
+                    <div>
+                        <h3>データベース不要で「安全」</h3>
+                        <p>複雑なシステムを持たないため、ハッキングや乗っ取りのリスクが極限まで低くなります。</p>
+                    </div>
+                </div>
+
+                <div class="value-box" data-aos="fade-right">
+                    <div class="value-icon">💰</div>
+                    <div>
+                        <h3>保守費0円で「安い」</h3>
+                        <p>一度作ってしまえば、サーバー代とドメイン代だけで運用可能です。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray render-optimize">
+            <div class="container">
+                <h2 data-aos="fade-up">プロのSEO内部対策標準装備</h2>
+                <div class="seo-grid">
+                    <div class="seo-item" data-aos="flip-up">
+                        <h4>セマンティックマークアップ</h4>
+                        <p><small>header, main, footer等を正しく使用。</small></p>
+                    </div>
+                    <div class="seo-item" data-aos="flip-up" data-aos-delay="100">
+                        <h4>適切な見出し設計</h4>
+                        <p><small>h1, h2, h3の階層構造を論理的に設計。</small></p>
+                    </div>
+                    <div class="seo-item" data-aos="flip-up" data-aos-delay="200">
+                        <h4>構造化データ(JSON-LD)</h4>
+                        <p><small>検索エンジンが理解しやすい形式で記述。</small></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="price" class="render-optimize">
+            <div class="container">
+                <h2 data-aos="fade-up">料金プラン</h2>
+                <div class="price-card" data-aos="zoom-in">
+                    <div class="price-badge">お試し・部分修正</div>
+                    <h3>基本制作費</h3>
+                    <div class="price-main">1,200<span style="font-size:1.5rem">円〜</span></div>
+                    <p class="price-sub">※トップページ1セクション等の価格</p>
+                    <a href="#cta" class="cta-btn" style="margin-top:20px;">見積もりをとる</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray render-optimize">
+             <div class="container">
+                <h2 data-aos="fade-up">制作の流れ・FAQ</h2>
+                <p class="text-center">（ここに詳細なフローとFAQが入ります）</p>
+            </div>
+        </section>
+
+        <section id="cta" style="background-color: var(--primary-color); color: #fff;">
+            <div class="container text-center">
+                <h2 style="color: #fff; border: none;" data-aos="zoom-in">まずはご相談ください</h2>
+                <div data-aos="zoom-in" data-aos-delay="200">
+                    <a href="#" class="cta-btn" style="background-color: #fff; color: var(--primary-color);">ココナラで相談する</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Static Web Production Service.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+    
+    <script>
+        // --- 1. Service Worker Registration (Long Cache) ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registered!', reg))
+                    .catch(err => console.log('SW failed', err));
+            });
+        }
+
+        // --- 2. Eliminate Forced Reflow & Main Thread Blocking ---
+        // 以前はDOMContentLoadedですぐにAOS.init()をしており、
+        // 全要素の高さ計算(offset)が走り、メインスレッドを長時間占有していました。
+        
+        window.addEventListener('load', () => {
+            // 'load' イベント後、さらにアイドリング状態を待ってから実行
+            // これにより、FCP/LCPの計測完了後に重い処理を回します。
+            const initAnimation = () => {
+                if (typeof AOS !== 'undefined') {
+                    AOS.init({
+                        duration: 1000,
+                        once: true,
+                        offset: 100,
+                        // disable: 'mobile' // 必要に応じてスマホでは無効化して更に軽量化
+                    });
+                }
+            };
+
+            // requestIdleCallbackが使える場合は使う（メインスレッドが空いた時に実行）
+            if (window.requestIdleCallback) {
+                requestIdleCallback(initAnimation);
+            } else {
+                // 非対応ブラウザは遅延実行
+                setTimeout(initAnimation, 200); 
+            }
+        });
+    </script>
+</body>
+</html>
