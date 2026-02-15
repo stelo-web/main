@@ -1,6 +1,6 @@
 // sw.js
 const CACHE_NAME = 'font-cache-v1';
-const FONT_URL = 'https://stelo-web.github.io/main/font/Noto_Sans_JP.zip/NotoSansJP-VariableFont_wght.ttf';
+const FONT_URL = 'https://stelo-web.github.io/main/font/NotoSansJP-VariableFont_wght.ttf';
 
 self.addEventListener('install', (event) => {
     // Service Workerインストール時にフォントをキャッシュ
