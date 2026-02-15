@@ -8,10 +8,14 @@
     <title>格安・高品質な静的ホームページ制作 | ココナラ実績多数 | 個人事業主・中小企業向け</title>
     <meta name="description" content="ココナラで高評価。初期費用1,200円〜、維持費0円の静的ホームページ制作サービス。個人事業主様・中小企業様に特化し、SEOに強いコーポレートサイトを格安で構築します。スマホ対応、表示速度高速化もお任せください。">
     
-    <link rel="preload" href="https://stelo-web.github.io/main/font/NotoSansJP-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://stelo-web.github.io" crossorigin>
 
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+    <link rel="preload" href="https://stelo-web.github.io/main/font/Noto_Sans_JP.zip/NotoSansJP-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -31,14 +35,11 @@
 
     <style>
         /* --- Font Definition --- */
-        /* 注意: 指定されたURLがZIPファイルそのものである場合、ブラウザは解釈できません。
-           以下は「そのURLが.ttfファイルを直接返却する」前提の記述です。
-        */
         @font-face {
             font-family: 'Noto Sans JP Custom';
-            src: url('https://stelo-web.github.io/main/font/NotoSansJP-VariableFont_wght.ttf') format('truetype');
-            font-weight: 100 900; /* Variable Font対応 */
-            font-display: swap;   /* 読み込み完了まではシステムフォントを表示（FOIT防止） */
+            src: url('https://stelo-web.github.io/main/font/Noto_Sans_JP.zip/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+            font-weight: 100 900;
+            font-display: swap;
         }
 
         /* --- Base Variables & Reset --- */
@@ -48,7 +49,6 @@
             --text-color: #333333;
             --bg-light: #f9f9f9;
             --bg-white: #ffffff;
-            /* 初期はシステムフォント、読み込み後にカスタムフォントへSWAP */
             --font-main: 'Noto Sans JP Custom', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
@@ -64,7 +64,6 @@
             line-height: 1.8;
             background-color: var(--bg-white);
             overflow-x: hidden;
-            /* font-synthesis を無効化し、レンダリング負荷を軽減 */
             font-synthesis: none;
         }
 
@@ -73,13 +72,10 @@
         img { max-width: 100%; height: auto; display: block; }
 
         /* --- Performance Optimization Utility --- */
-        /* content-visibility: auto
-           画面外のレンダリングをスキップし、初期ロード時のメインスレッドの負荷（レイアウト計算）を大幅削減します。
-           これにより「謎の重いタスク」を軽減します。
-        */
+        /* content-visibility: auto で画面外のレンダリングをスキップ */
         .render-optimize {
             content-visibility: auto;
-            contain-intrinsic-size: 1000px; /* 大まかな高さを指定してスクロールバーのガタつき防止 */
+            contain-intrinsic-size: 800px; /* ガタつき防止のための推定高さ */
         }
 
         /* --- Header --- */
@@ -91,7 +87,7 @@
             top: 0;
             z-index: 1000;
             padding: 15px 0;
-            will-change: transform; /* 合成レイヤーを生成し再描画コスト削減 */
+            will-change: transform;
         }
         .header-inner {
             display: flex;
@@ -120,9 +116,8 @@
         .mb-40 { margin-bottom: 40px; }
 
         /* --- Main Visual (FV) --- */
-        /* LCP要素のため、アニメーションでの不可視化を避け、即座に表示する設計 */
         .hero {
-            padding-top: 150px; /* ヘッダー分確保 */
+            padding-top: 150px;
             padding-bottom: 100px;
             background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
             color: #fff;
@@ -133,7 +128,6 @@
             line-height: 1.4;
             margin-bottom: 30px;
             font-weight: 900;
-            /* LCP向上のため、transformアニメーションはJS読み込み後まで待機させない */
         }
         .hero-tag {
             background-color: var(--accent-color);
@@ -389,39 +383,35 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     
     <script>
-        // --- 1. Service Worker Registration (Long Cache) ---
+        // --- 1. Service Worker Registration ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registered!', reg))
-                    .catch(err => console.log('SW failed', err));
+                    .then(reg => console.log('SW Registered!', reg))
+                    .catch(err => console.error('SW Error:', err));
             });
         }
 
-        // --- 2. Eliminate Forced Reflow & Main Thread Blocking ---
-        // 以前はDOMContentLoadedですぐにAOS.init()をしており、
-        // 全要素の高さ計算(offset)が走り、メインスレッドを長時間占有していました。
-        
+        // --- 2. AOS Init Optimization (LCP優先) ---
         window.addEventListener('load', () => {
-            // 'load' イベント後、さらにアイドリング状態を待ってから実行
-            // これにより、FCP/LCPの計測完了後に重い処理を回します。
-            const initAnimation = () => {
+            const initAOS = () => {
                 if (typeof AOS !== 'undefined') {
                     AOS.init({
                         duration: 1000,
                         once: true,
                         offset: 100,
-                        // disable: 'mobile' // 必要に応じてスマホでは無効化して更に軽量化
                     });
+                } else {
+                    // まだ読み込まれていなければ少し待機
+                    setTimeout(initAOS, 100);
                 }
             };
 
-            // requestIdleCallbackが使える場合は使う（メインスレッドが空いた時に実行）
+            // メインスレッドが空いたタイミングで実行
             if (window.requestIdleCallback) {
-                requestIdleCallback(initAnimation);
+                requestIdleCallback(initAOS);
             } else {
-                // 非対応ブラウザは遅延実行
-                setTimeout(initAnimation, 200); 
+                setTimeout(initAOS, 200); 
             }
         });
     </script>
